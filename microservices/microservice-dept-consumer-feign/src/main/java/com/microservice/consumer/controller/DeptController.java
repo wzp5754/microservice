@@ -1,11 +1,10 @@
 package com.microservice.consumer.controller;
 
 import com.microservice.entity.DeptInfo;
-import com.microservice.service.DeptClientService;
+import com.microservice.consumer.service.DeptClientService;
+import com.microservice.utils.RetResult;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.cloud.client.loadbalancer.LoadBalanced;
 import org.springframework.web.bind.annotation.*;
-import org.springframework.web.client.RestTemplate;
 
 import java.util.List;
 
@@ -19,12 +18,21 @@ public class DeptController {
 
 
     @GetMapping(value = "/get/{id}")
-    public DeptInfo get(@PathVariable("id") Long id){
-        return deptClientService.get(id);
+    public RetResult get(@PathVariable("id") Long id){
+        DeptInfo deptInfo = deptClientService.get(id);
+        if (null == deptInfo){
+            return RetResult.error("未查到数据！");
+        }
+        return RetResult.success(deptInfo);
+
     }
     @GetMapping(value = "/list")
-    public List<DeptInfo> list(){
-        return deptClientService.list();
+    public RetResult list(){
+        List<DeptInfo> list = deptClientService.list();
+        if (null == list){
+            return RetResult.error("未查到数据！");
+        }
+        return RetResult.success(list);
     }
     @PostMapping(value = "/add")
     public boolean add(DeptInfo deptInfo){

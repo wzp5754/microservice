@@ -21,8 +21,13 @@ public class DeptController {
     private final String DEPT_INSTANCE = "MICROSERVICE-DEPT";
 
     @GetMapping(value = "/get/{id}")
+    @HystrixCommand(commandKey = DEPT_INSTANCE,fallbackMethod = "fallBack_get")
     public DeptInfo get(@PathVariable("id") Long id){
-        return deptService.get(id);
+        DeptInfo info = deptService.get(id);
+        if (null == info){
+            throw new RuntimeException();
+        }
+        return info;
     }
 
     @GetMapping(value = "/list")
@@ -31,7 +36,6 @@ public class DeptController {
     }
 
     @PostMapping(value = "/add")
-    @HystrixCommand(commandKey = "",fallbackMethod = "")
     public boolean add(DeptInfo deptInfo){
         return deptService.add(deptInfo);
     }
@@ -54,6 +58,11 @@ public class DeptController {
         return this.client;
     }
 
+    //ceshi
+
+    public DeptInfo fallBack_get(@PathVariable("id") Long id){
+       return new DeptInfo().setDeptno(id).setDeptname("未找到");
+    }
 
 
 }

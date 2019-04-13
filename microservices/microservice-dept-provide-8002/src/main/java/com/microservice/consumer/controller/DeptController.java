@@ -1,7 +1,7 @@
 package com.microservice.consumer.controller;
 
 import com.microservice.entity.DeptInfo;
-import com.microservice.service.DeptService;
+import com.microservice.consumer.service.DeptService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.cloud.client.ServiceInstance;
 import org.springframework.cloud.client.discovery.DiscoveryClient;
